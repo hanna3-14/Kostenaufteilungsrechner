@@ -10,9 +10,9 @@ public class Abrechnung {
 	private final UUID abrechnungsID;
 	private UUID eventID;
 	private Geldbetrag gesamtausgaben;
-	private HashMap<Integer, Geldbetrag> bilanzen;
+	private HashMap<Integer, Bilanz> bilanzen;
 
-	public Abrechnung(UUID eventID, Geldbetrag gesamtausgaben, HashMap<Integer, Geldbetrag> bilanzen) {
+	public Abrechnung(UUID eventID, Geldbetrag gesamtausgaben, HashMap<Integer, Bilanz> bilanzen) {
 		this.abrechnungsID = UUID.randomUUID();
 		this.eventID = eventID;
 		this.gesamtausgaben = gesamtausgaben;
@@ -43,11 +43,11 @@ public class Abrechnung {
 		this.gesamtausgaben = gesamtausgaben;
 	}
 
-	public HashMap<Integer, Geldbetrag> getBilanzen() {
+	public HashMap<Integer, Bilanz> getBilanzen() {
 		return bilanzen;
 	}
 
-	public void setBilanzen(HashMap<Integer, Geldbetrag> bilanzen) {
+	public void setBilanzen(HashMap<Integer, Bilanz> bilanzen) {
 		this.bilanzen = bilanzen;
 	}
 
@@ -67,7 +67,7 @@ public class Abrechnung {
 		// Berechnung der Gesamtausgaben
 		Geldbetrag gesamtausgaben = new Geldbetrag(0.0);
 		for (Ausgabe a : ausgabenListe) {
-			gesamtausgaben = new Geldbetrag(gesamtausgaben.getWert() + a.getGeldbetrag().getWert());
+			gesamtausgaben = gesamtausgaben.increaseGeldbetrag(a.getGeldbetrag());
 		}
 		this.setGesamtausgaben(gesamtausgaben);
 	}
@@ -75,16 +75,16 @@ public class Abrechnung {
 	public void berechneBilanzen(Event event) {
 		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
 
-		Geldbetrag startbetrag = new Geldbetrag(0.0);
-		LinkedHashMap<Integer, Geldbetrag> bilanzen = new LinkedHashMap<>();
+		Bilanz startbilanz = new Bilanz(0.0);
+		LinkedHashMap<Integer, Bilanz> bilanzen = new LinkedHashMap<>();
 
-		// Alle Mitglieder, die an einer Ausgabe des Events beteiligt sind, werden mit einem Startbetrag von 0.00 Euro hinzugefügt
+		// Alle Mitglieder, die an einer Ausgabe des Events beteiligt sind, werden mit einer Startbilanz von 0.00 Euro hinzugefügt
 		for (Ausgabe a : ausgabenListe) {
-			bilanzen.put(a.getBezahlerID(), startbetrag);
+			bilanzen.put(a.getBezahlerID(), startbilanz);
 		}
 		for (Ausgabe a : ausgabenListe) {
 			for (int i : a.getEmpfaengerIDs()) {
-				bilanzen.put(i, startbetrag);
+				bilanzen.put(i, startbilanz);
 			}
 		}
 
@@ -92,11 +92,11 @@ public class Abrechnung {
 		for (Ausgabe a : ausgabenListe) {
 			for (int i : bilanzen.keySet()) {
 				if (a.getBezahlerID() == i) {
-					bilanzen.computeIfPresent(i, (k, v) -> v.increaseBetrag(a.getGeldbetrag()));
+					bilanzen.computeIfPresent(i, (k, v) -> v.increaseBilanz(a.getGeldbetrag()));
 				}
 				Geldbetrag anteiligerBetrag = new Geldbetrag(a.getGeldbetrag().getWert() / a.getEmpfaengerIDs().size());
 				if (a.getEmpfaengerIDs().contains(i)) {
-					bilanzen.computeIfPresent(i, (k, v) -> v.decreaseBetrag(anteiligerBetrag));
+					bilanzen.computeIfPresent(i, (k, v) -> v.decreaseBilanz(anteiligerBetrag));
 				}
 			}
 		}

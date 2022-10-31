@@ -2,17 +2,13 @@ package de.dhbw;
 
 import java.util.Objects;
 
-public final class Geldbetrag {
+public final class Bilanz {
 
 	private final double wert;
 	private final String waehrung;
 
-	public Geldbetrag(double wert) {
-		if (wert >= 0.0) {
-			this.wert = wert;
-		} else {
-			this.wert = 0.0;
-		}
+	public Bilanz(double wert) {
+		this.wert = wert;
 		this.waehrung = "Euro";
 	}
 
@@ -24,13 +20,17 @@ public final class Geldbetrag {
 		return waehrung;
 	}
 
-	public Geldbetrag increaseGeldbetrag(Geldbetrag geldbetrag) {
-		return new Geldbetrag(this.getWert() + geldbetrag.getWert());
+	public Bilanz increaseBilanz(Geldbetrag geldbetrag) {
+		return new Bilanz(this.getWert() + geldbetrag.getWert());
+	}
+
+	public Bilanz decreaseBilanz(Geldbetrag geldbetrag) {
+		return new Bilanz(this.getWert() - geldbetrag.getWert());
 	}
 
 	@Override
 	public String toString() {
-		return "Geldbetrag{" +
+		return "Bilanz{" +
 				"wert=" + wert +
 				", waehrung='" + waehrung + '\'' +
 				'}';
@@ -40,8 +40,8 @@ public final class Geldbetrag {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Geldbetrag that = (Geldbetrag) o;
-		return Double.compare(that.wert, wert) == 0 && waehrung.equals(that.waehrung);
+		Bilanz bilanz = (Bilanz) o;
+		return Double.compare(bilanz.wert, wert) == 0 && waehrung.equals(bilanz.waehrung);
 	}
 
 	@Override
