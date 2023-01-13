@@ -1,4 +1,4 @@
-package de.dhbw;
+package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
 public class Mitglied {
 

@@ -17,7 +17,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>de.dhbw.Kostenaufteilungsrechner</mainClass>
+              <mainClass>de.dhbw.kostenaufteilungsrechner.Kostenaufteilungsrechner</mainClass>
             </manifest>
           </archive>
         </configuration>

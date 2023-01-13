@@ -1,4 +1,4 @@
-package de.dhbw;
+package de.dhbw.kostenaufteilungsrechner;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
