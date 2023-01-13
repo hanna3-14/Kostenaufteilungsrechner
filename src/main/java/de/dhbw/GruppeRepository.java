@@ -1,14 +1,16 @@
 package de.dhbw;
 
+import java.util.Optional;
+
 public interface GruppeRepository {
 
-	void speichereGruppe(Gruppe neueGruppe);
+	void erstelleGruppe(Gruppe neueGruppe);
 
 	Iterable<Gruppe> findeAlleGruppen() throws Exception;
 
-	Gruppe findeGruppeÜberName(String gruppenName) throws Exception;
+	Optional<Gruppe> findeGruppeÜberName(String gruppenName) throws Exception;
 
 	void aktualisiereGruppe(Gruppe gruppe);
 
-	void loescheGruppe(String gruppenName);
+	void entferneGruppe(String gruppenName);
 }
