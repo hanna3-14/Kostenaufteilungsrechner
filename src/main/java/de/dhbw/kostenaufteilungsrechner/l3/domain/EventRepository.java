@@ -7,11 +7,13 @@ public interface EventRepository {
 
 	void erstelleEvent(Event neuesEvent);
 
-	Iterable<Event> findeAlleEvents() throws Exception;
+	Iterable<Event> findeAlleEvents();
 
-	Optional<Event> findeEventÜberID(UUID eventID) throws Exception;
+	Optional<Event> findeEventÜberID(UUID eventID);
 
 	void aktualisiereEvent(Event event);
+
+	void fügeNeueAusgabeHinzu(UUID eventID, Ausgabe ausgabe);
 
 	void entferneEvent(UUID eventID);
 }

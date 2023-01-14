@@ -7,9 +7,9 @@ public interface AbrechnungRepository {
 
 	void erstelleAbrechnung(Abrechnung neueAbrechnung);
 
-	Iterable<Abrechnung> findeAlleAbrechnungen() throws Exception;
+	Iterable<Abrechnung> findeAlleAbrechnungen();
 
-	Optional<Abrechnung> findeAbrechnungÜberID(UUID abrechnungsID) throws Exception;
+	Optional<Abrechnung> findeAbrechnungÜberID(UUID abrechnungsID);
 
 	void aktualisiereAbrechnung(Abrechnung abrechnung);
 
