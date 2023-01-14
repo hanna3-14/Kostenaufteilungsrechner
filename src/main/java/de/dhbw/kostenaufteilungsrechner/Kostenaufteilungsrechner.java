@@ -8,6 +8,7 @@ import picocli.CommandLine.Command;
 		version = "1.0-SNAPSHOT",
 		subcommands = {
 				CommandLine.HelpCommand.class,
+				erstelleGruppe.class,
 				erstelleEvent.class,
 				zeigeEvents.class,
 				zeigeEvent.class,
