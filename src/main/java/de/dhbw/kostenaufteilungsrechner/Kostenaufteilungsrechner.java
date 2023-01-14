@@ -11,6 +11,7 @@ import picocli.CommandLine.Command;
 				erstelleGruppe.class,
 				zeigeGruppen.class,
 				aktualisiereGruppe.class,
+				entferneGruppe.class,
 				erstelleEvent.class,
 				zeigeEvents.class,
 				zeigeEvent.class,
