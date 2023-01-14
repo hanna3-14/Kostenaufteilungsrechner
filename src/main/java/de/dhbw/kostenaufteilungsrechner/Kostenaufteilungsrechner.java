@@ -8,7 +8,8 @@ import picocli.CommandLine.Command;
 		version = "1.0-SNAPSHOT",
 		subcommands = {
 				CommandLine.HelpCommand.class,
-				erstelleEvent.class
+				erstelleEvent.class,
+				zeigeEvents.class
 		},
 		description = "Kostenaufteilungsrechner für Advanced SWE",
 		mixinStandardHelpOptions = true)
