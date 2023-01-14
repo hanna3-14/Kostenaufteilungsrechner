@@ -4,11 +4,16 @@ import de.dhbw.kostenaufteilungsrechner.l1.adapters.EventDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Event;
 import picocli.CommandLine;
 
+import java.util.UUID;
+
 @CommandLine.Command(name = "zeige-events", mixinStandardHelpOptions = true, description = "zeigt alle Events einer Gruppe an")
 public class zeigeEvents implements Runnable {
 
 	@CommandLine.Option(names = {"-g", "--gruppenname"}, description = "Filtert die Ausgabe nach dem Gruppenname")
 	String gruppenName;
+
+	@CommandLine.Option(names = {"-id", "--eventID"}, description = "Filtert die Ausgabe nach der eventID")
+	UUID eventID;
 
 	@Override
 	public void run() {
@@ -22,16 +27,26 @@ public class zeigeEvents implements Runnable {
 			return;
 		}
 
-		if (gruppenName == null) {
+		if (eventID != null) {
 			for (Event e : events) {
-				System.out.println(e);
+				if (e.getEventID().equals(eventID)) {
+					System.out.println(e);
+				}
 			}
-		} else {
+			return;
+		}
+
+		if (gruppenName != null) {
 			for (Event e : events) {
 				if (e.getGruppenName().equals(gruppenName)) {
 					System.out.println(e);
 				}
 			}
+			return;
+		}
+
+		for (Event e : events) {
+			System.out.println(e);
 		}
 	}
 }
