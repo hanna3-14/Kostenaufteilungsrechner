@@ -30,10 +30,7 @@ public final class Geldbetrag {
 
 	@Override
 	public String toString() {
-		return "Geldbetrag{" +
-				"wert=" + wert +
-				", waehrung='" + waehrung + '\'' +
-				'}';
+		return wert + " " + waehrung;
 	}
 
 	@Override

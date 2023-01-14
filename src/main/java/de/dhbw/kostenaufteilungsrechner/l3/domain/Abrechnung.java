@@ -10,13 +10,13 @@ public class Abrechnung {
 	private final UUID abrechnungsID;
 	private UUID eventID;
 	private Geldbetrag gesamtausgaben;
-	private HashMap<Integer, Bilanz> bilanzen;
+	private HashMap<Integer, Bilanz> bilanzenMap;
 
-	public Abrechnung(UUID eventID, Geldbetrag gesamtausgaben, HashMap<Integer, Bilanz> bilanzen) {
+	public Abrechnung(UUID eventID, Geldbetrag gesamtausgaben, HashMap<Integer, Bilanz> bilanzenMap) {
 		this.abrechnungsID = UUID.randomUUID();
 		this.eventID = eventID;
 		this.gesamtausgaben = gesamtausgaben;
-		this.bilanzen = bilanzen;
+		this.bilanzenMap = bilanzenMap;
 	}
 
 	public Abrechnung(UUID eventID) {
@@ -43,22 +43,30 @@ public class Abrechnung {
 		this.gesamtausgaben = gesamtausgaben;
 	}
 
-	public HashMap<Integer, Bilanz> getBilanzen() {
+	public HashMap<Integer, Bilanz> getBilanzenMap() {
+		return bilanzenMap;
+	}
+
+	public void setBilanzenMap(HashMap<Integer, Bilanz> bilanzenMap) {
+		this.bilanzenMap = bilanzenMap;
+	}
+
+	private String getBilanzenString() {
+		String bilanzen = System.lineSeparator();
+		for (int i = 0; i < bilanzenMap.size(); i++) {
+			bilanzen += "\t" + (i + 1) + " " + bilanzenMap.get(i + 1) + System.lineSeparator();
+		}
 		return bilanzen;
 	}
 
-	public void setBilanzen(HashMap<Integer, Bilanz> bilanzen) {
-		this.bilanzen = bilanzen;
-	}
 
 	@Override
 	public String toString() {
-		return "Abrechnung{" +
-				"abrechnungsID=" + abrechnungsID +
-				", eventID=" + eventID +
-				", gesamtausgaben=" + gesamtausgaben +
-				", bilanzen=" + bilanzen +
-				'}';
+		String bilanzenstring = this.getBilanzenString();
+		return "AbrechnungsID: " + abrechnungsID + System.lineSeparator() +
+				"EventID: " + eventID + System.lineSeparator() +
+				"Gesamtausgaben: " + gesamtausgaben + System.lineSeparator() +
+				"Bilanzen: " + bilanzenstring;
 	}
 
 	public void berechneGesamtausgaben(Event event) {
@@ -100,6 +108,6 @@ public class Abrechnung {
 				}
 			}
 		}
-		this.setBilanzen(bilanzen);
+		this.setBilanzenMap(bilanzen);
 	}
 }

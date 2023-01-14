@@ -49,13 +49,20 @@ public class Event {
 		this.ausgabenListe.add(ausgabe);
 	}
 
+	private String getAusgabenString() {
+		String ausgaben = System.lineSeparator();
+		for (Ausgabe a : ausgabenListe) {
+			ausgaben += a.toString();
+		}
+		return ausgaben;
+	}
+
 	@Override
 	public String toString() {
-		return "Event{" +
-				"eventID=" + eventID +
-				", beschreibung='" + beschreibung + '\'' +
-				", gruppenName='" + gruppenName + '\'' +
-				", ausgabenListe=" + ausgabenListe +
-				'}';
+		String ausgabenstring = this.getAusgabenString();
+		return "EventID: " + eventID + System.lineSeparator() +
+				"Beschreibung: " + beschreibung + System.lineSeparator() +
+				"Gruppenname: " + gruppenName + System.lineSeparator() +
+				"Ausgaben: " + ausgabenstring;
 	}
 }

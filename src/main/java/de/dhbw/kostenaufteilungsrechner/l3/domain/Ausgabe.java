@@ -57,12 +57,10 @@ public class Ausgabe {
 
 	@Override
 	public String toString() {
-		return "Ausgabe{" +
-				"ausgabenID=" + ausgabenID +
-				", beschreibung='" + beschreibung + '\'' +
-				", geldbetrag=" + geldbetrag +
-				", bezahlerID=" + bezahlerID +
-				", empfaengerIDs=" + empfaengerIDs +
-				'}';
+		return "\tAusgabenID: " + ausgabenID + System.lineSeparator() +
+				"\tBeschreibung: " + beschreibung + System.lineSeparator() +
+				"\tGeldbetrag: " + geldbetrag + System.lineSeparator() +
+				"\tBezahlerID: " + bezahlerID + System.lineSeparator() +
+				"\tEmpfaengerIDs: " + empfaengerIDs + System.lineSeparator() + System.lineSeparator();
 	}
 }

@@ -28,9 +28,6 @@ public class Mitglied {
 
 	@Override
 	public String toString() {
-		return "Mitglied{" +
-				"mitgliedsID=" + mitgliedsID +
-				", name='" + name + '\'' +
-				'}';
+		return "\t"+ mitgliedsID + " " + name + System.lineSeparator();
 	}
 }

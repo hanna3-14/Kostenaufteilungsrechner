@@ -78,7 +78,7 @@ public class AbrechnungDBAdapter implements AbrechnungRepository {
 				if (a.getAbrechnungsID().equals(abrechnung.getAbrechnungsID())) {
 					a.setEventID(abrechnung.getEventID());
 					a.setGesamtausgaben(abrechnung.getGesamtausgaben());
-					a.setBilanzen(abrechnung.getBilanzen());
+					a.setBilanzenMap(abrechnung.getBilanzenMap());
 				}
 			}
 		} catch (IOException e) {

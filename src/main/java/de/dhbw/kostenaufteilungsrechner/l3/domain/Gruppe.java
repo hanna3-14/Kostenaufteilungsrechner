@@ -31,11 +31,18 @@ public class Gruppe {
 		this.mitgliederListe = mitgliederListe;
 	}
 
+	private String getMitgliederString() {
+		String ausgaben = System.lineSeparator();
+		for (Mitglied m : mitgliederListe) {
+			ausgaben += m.toString();
+		}
+		return ausgaben;
+	}
+
 	@Override
 	public String toString() {
-		return "Gruppe{" +
-				"gruppenName='" + gruppenName + '\'' +
-				", mitgliederListe=" + mitgliederListe +
-				'}';
+		String mitgliederstring = this.getMitgliederString();
+		return "Gruppenname: " + gruppenName + System.lineSeparator() +
+				"Mitglieder: " + mitgliederstring;
 	}
 }
