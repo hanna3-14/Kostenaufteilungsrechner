@@ -9,6 +9,7 @@ import picocli.CommandLine.Command;
 		subcommands = {
 				CommandLine.HelpCommand.class,
 				erstelleGruppe.class,
+				zeigeGruppen.class,
 				erstelleEvent.class,
 				zeigeEvents.class,
 				zeigeEvent.class,
