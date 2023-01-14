@@ -4,10 +4,10 @@ import de.dhbw.kostenaufteilungsrechner.l1.adapters.EventDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Event;
 import picocli.CommandLine;
 
-@CommandLine.Command(name = "zeige-events", description = "zeigt alle Events einer Gruppe an (Parameter: Gruppenname)")
+@CommandLine.Command(name = "zeige-events", mixinStandardHelpOptions = true, description = "zeigt alle Events einer Gruppe an")
 public class zeigeEvents implements Runnable {
 
-	@CommandLine.Parameters(paramLabel = "gruppenname")
+	@CommandLine.Option(names = {"-g", "--gruppenname"}, description = "Filtert die Ausgabe nach dem Gruppenname")
 	String gruppenName;
 
 	@Override
@@ -22,9 +22,15 @@ public class zeigeEvents implements Runnable {
 			return;
 		}
 
-		for (Event e : events) {
-			if (e.getGruppenName().equals(gruppenName)) {
+		if (gruppenName == null) {
+			for (Event e : events) {
 				System.out.println(e);
+			}
+		} else {
+			for (Event e : events) {
+				if (e.getGruppenName().equals(gruppenName)) {
+					System.out.println(e);
+				}
 			}
 		}
 	}
