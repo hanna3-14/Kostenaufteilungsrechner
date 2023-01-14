@@ -1,11 +1,15 @@
 package de.dhbw.kostenaufteilungsrechner;
 
+import de.dhbw.kostenaufteilungsrechner.l0.plugin.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 @Command(name = "Kostenaufteilungsrechner",
 		version = "1.0-SNAPSHOT",
-		subcommands = {CommandLine.HelpCommand.class},
+		subcommands = {
+				CommandLine.HelpCommand.class,
+				erstelleEvent.class
+		},
 		description = "Kostenaufteilungsrechner für Advanced SWE",
 		mixinStandardHelpOptions = true)
 public class Kostenaufteilungsrechner {
