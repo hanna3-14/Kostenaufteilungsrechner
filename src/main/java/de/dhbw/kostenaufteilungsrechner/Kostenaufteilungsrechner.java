@@ -10,6 +10,7 @@ import picocli.CommandLine.Command;
 				CommandLine.HelpCommand.class,
 				erstelleGruppe.class,
 				zeigeGruppen.class,
+				aktualisiereGruppe.class,
 				erstelleEvent.class,
 				zeigeEvents.class,
 				zeigeEvent.class,
