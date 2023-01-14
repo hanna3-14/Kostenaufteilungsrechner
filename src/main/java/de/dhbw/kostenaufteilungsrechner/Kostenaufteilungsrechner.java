@@ -13,6 +13,7 @@ import picocli.CommandLine.Command;
 				zeigeEvent.class,
 				aktualisiereEvent.class,
 				fuegeAusgabeZuEventHinzu.class,
+				entferneEvent.class,
 		},
 		description = "Kostenaufteilungsrechner für Advanced SWE",
 		usageHelpAutoWidth = true,
