@@ -23,8 +23,21 @@ public class erstelleGruppe implements Runnable {
 	public void run() {
 
 		GruppeDBAdapter gruppeDBAdapter = new GruppeDBAdapter();
-		
+
+		Iterable<Gruppe> gruppen = gruppeDBAdapter.findeAlleGruppen();
+		List<String> gruppenNamen = new ArrayList<>();
+
+		for (Gruppe g : gruppen) {
+			gruppenNamen.add(g.getGruppenName());
+		}
+
 		if (gruppenName == null) {
+			gruppenName = System.console().readLine("Gruppenname: ");
+		}
+		
+		while (gruppenNamen.contains(gruppenName)) {
+			System.out.println("Dieser Gruppenname existiert bereits! Bitte wähle einen anderen Gruppenname!");
+
 			gruppenName = System.console().readLine("Gruppenname: ");
 		}
 
@@ -33,7 +46,7 @@ public class erstelleGruppe implements Runnable {
 		}
 
 		List<String> namensListe = new ArrayList<>();
-		String[] namensArray = namen.split(" ");
+		String[] namensArray = namen.replaceAll(",", "").split(" ");
 
 		for (String s : namensArray) {
 			namensListe.add(s);
