@@ -1,8 +1,8 @@
 package de.dhbw.kostenaufteilungsrechner.l0.plugin;
 
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.EventDBAdapter;
-import de.dhbw.kostenaufteilungsrechner.l3.domain.Ausgabe;
-import de.dhbw.kostenaufteilungsrechner.l3.domain.Geldbetrag;
+import de.dhbw.kostenaufteilungsrechner.l1.adapters.GruppeDBAdapter;
+import de.dhbw.kostenaufteilungsrechner.l3.domain.*;
 import picocli.CommandLine;
 
 import java.util.ArrayList;
@@ -31,6 +31,11 @@ public class fuegeAusgabeZuEventHinzu implements Runnable {
 	public void run() {
 
 		EventDBAdapter eventDBAdapter = new EventDBAdapter();
+		GruppeDBAdapter gruppeDBAdapter = new GruppeDBAdapter();
+
+		Event event = eventDBAdapter.findeEventÜberID(eventID).orElse(null);
+		Gruppe gruppe = gruppeDBAdapter.findeGruppeÜberName(event.getGruppenName()).orElse(null);
+		List<Mitglied> gruppenMitglieder = gruppe.getMitgliederListe();
 
 		if (beschreibung == null) {
 			beschreibung = System.console().readLine("Beschreibung: ");
@@ -43,15 +48,21 @@ public class fuegeAusgabeZuEventHinzu implements Runnable {
 		Geldbetrag geldbetrag = new Geldbetrag(Double.parseDouble(geld));
 
 		if (bezahler == null) {
-			bezahler = System.console().readLine("Bezahler: ");
+			for (Mitglied m : gruppenMitglieder) {
+				System.out.println(m.getMitgliedsID() + " " + m.getName());
+			}
+			bezahler = System.console().readLine("Wer hat bezahlt? Gib die ID ein: ");
 		}
 
 		if (empfaenger == null) {
-			empfaenger = System.console().readLine("Empfänger: ");
+			for (Mitglied m : gruppenMitglieder) {
+				System.out.println(m.getMitgliedsID() + " " + m.getName());
+			}
+			empfaenger = System.console().readLine("Für wen wurde bezahlt? Gib die ID(s) ein: ");
 		}
 
 		List<Integer> empfaengerIDs = new ArrayList<>();
-		String[] empf = empfaenger.split(" ");
+		String[] empf = empfaenger.replaceAll(",", "").split(" ");
 
 		for (String s : empf) {
 			empfaengerIDs.add(Integer.parseInt(s));
