@@ -92,7 +92,7 @@ public class AbrechnungDBAdapter implements AbrechnungRepository {
 	}
 
 	@Override
-	public void enferneAbrechnung(UUID abrechungsID) {
+	public void entferneAbrechnung(UUID abrechungsID) {
 		List<Abrechnung> abrechnungen = new ArrayList<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(database))) {
 			abrechnungen = gson.fromJson(br, new TypeToken<List<Abrechnung>>() {

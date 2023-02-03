@@ -13,5 +13,5 @@ public interface AbrechnungRepository {
 
 	void aktualisiereAbrechnung(Abrechnung abrechnung);
 
-	void enferneAbrechnung(UUID abrechungsID);
+	void entferneAbrechnung(UUID abrechungsID);
 }
