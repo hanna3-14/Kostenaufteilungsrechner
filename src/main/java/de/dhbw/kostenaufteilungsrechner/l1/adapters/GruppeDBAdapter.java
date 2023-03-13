@@ -16,7 +16,7 @@ public class GruppeDBAdapter implements GruppeRepository {
 
 	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-	String database = "gruppen.json";
+	String database = "datenbank/gruppen.json";
 
 	List<Gruppe> gruppenList = new ArrayList<>();
 

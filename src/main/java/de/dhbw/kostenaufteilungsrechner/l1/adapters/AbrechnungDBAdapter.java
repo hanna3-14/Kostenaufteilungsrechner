@@ -17,7 +17,7 @@ public class AbrechnungDBAdapter implements AbrechnungRepository {
 
 	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-	String database = "abrechnungen.json";
+	String database = "datenbank/abrechnungen.json";
 
 	List<Abrechnung> abrechnungsList = new ArrayList<>();
 
