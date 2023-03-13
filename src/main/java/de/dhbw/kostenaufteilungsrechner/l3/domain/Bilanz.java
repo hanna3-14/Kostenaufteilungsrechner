@@ -1,36 +1,39 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import org.javamoney.moneta.Money;
+
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import java.util.Objects;
 
 public final class Bilanz {
 
-	private final double wert;
-	private final String waehrung;
+	private CurrencyUnit euro = Monetary.getCurrency("EUR");
+	private Money wert;
 
-	public Bilanz(double wert) {
+	public Bilanz(Money wert) {
 		this.wert = wert;
-		this.waehrung = "Euro";
 	}
 
-	public double getWert() {
+	public Money getWert() {
 		return wert;
 	}
 
-	public String getWaehrung() {
-		return waehrung;
+	public CurrencyUnit getWaehrung() {
+		return euro;
 	}
 
 	public Bilanz increaseBilanz(Geldbetrag geldbetrag) {
-		return new Bilanz(this.getWert() + geldbetrag.getWert());
+		return new Bilanz(this.getWert().add(geldbetrag.getWert()));
 	}
 
 	public Bilanz decreaseBilanz(Geldbetrag geldbetrag) {
-		return new Bilanz(this.getWert() - geldbetrag.getWert());
+		return new Bilanz(this.getWert().subtract(geldbetrag.getWert()));
 	}
 
 	@Override
 	public String toString() {
-		return wert + " " + waehrung;
+		return wert + " " + euro;
 	}
 
 	@Override
@@ -38,11 +41,11 @@ public final class Bilanz {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Bilanz bilanz = (Bilanz) o;
-		return Double.compare(bilanz.wert, wert) == 0 && waehrung.equals(bilanz.waehrung);
+		return Objects.equals(euro, bilanz.euro) && Objects.equals(wert, bilanz.wert);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(wert, waehrung);
+		return Objects.hash(euro, wert);
 	}
 }

@@ -1,5 +1,9 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import org.javamoney.moneta.Money;
+
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,6 +11,7 @@ import java.util.UUID;
 
 public class Abrechnung {
 
+	private CurrencyUnit euro = Monetary.getCurrency("EUR");
 	private final UUID abrechnungsID;
 	private UUID eventID;
 	private Geldbetrag gesamtausgaben;
@@ -20,7 +25,7 @@ public class Abrechnung {
 	}
 
 	public Abrechnung(UUID eventID) {
-		this(eventID, new Geldbetrag(0.0), new HashMap<>());
+		this(eventID, new Geldbetrag(Money.of(0.0, Monetary.getCurrency("EUR"))), new HashMap<>());
 	}
 
 	public UUID getAbrechnungsID() {
@@ -73,7 +78,7 @@ public class Abrechnung {
 		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
 
 		// Berechnung der Gesamtausgaben
-		Geldbetrag gesamtausgaben = new Geldbetrag(0.0);
+		Geldbetrag gesamtausgaben = new Geldbetrag(Money.of(0.0, euro));
 		for (Ausgabe a : ausgabenListe) {
 			gesamtausgaben = gesamtausgaben.increaseGeldbetrag(a.getGeldbetrag());
 		}
@@ -83,7 +88,7 @@ public class Abrechnung {
 	public void berechneBilanzen(Event event) {
 		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
 
-		Bilanz startbilanz = new Bilanz(0.0);
+		Bilanz startbilanz = new Bilanz(Money.of(0.0, euro));
 		LinkedHashMap<Integer, Bilanz> bilanzen = new LinkedHashMap<>();
 
 		// Alle Mitglieder, die an einer Ausgabe des Events beteiligt sind, werden mit einer Startbilanz von 0.00 Euro hinzugefügt
@@ -102,7 +107,7 @@ public class Abrechnung {
 				if (a.getBezahlerID() == i) {
 					bilanzen.computeIfPresent(i, (k, v) -> v.increaseBilanz(a.getGeldbetrag()));
 				}
-				Geldbetrag anteiligerBetrag = new Geldbetrag(a.getGeldbetrag().getWert() / a.getEmpfaengerIDs().size());
+				Geldbetrag anteiligerBetrag = new Geldbetrag(a.getGeldbetrag().getWert().divide(a.getEmpfaengerIDs().size()));
 				if (a.getEmpfaengerIDs().contains(i)) {
 					bilanzen.computeIfPresent(i, (k, v) -> v.decreaseBilanz(anteiligerBetrag));
 				}

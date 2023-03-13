@@ -18,7 +18,7 @@ public class EventDBAdapter implements EventRepository {
 
 	Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-	String database = "events.json";
+	String database = "datenbank/events.json";
 
 	List<Event> eventList = new ArrayList<>();
 
