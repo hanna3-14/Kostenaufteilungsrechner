@@ -3,6 +3,7 @@ package de.dhbw.kostenaufteilungsrechner.l0.plugin;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.EventDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.GruppeDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.*;
+import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
 import picocli.CommandLine;
 
 import java.util.ArrayList;
@@ -45,7 +46,15 @@ public class fuegeAusgabeZuEventHinzu implements Runnable {
 			geld = System.console().readLine("Geldbetrag (in EURO): ");
 		}
 
-		Geldbetrag geldbetrag = new Geldbetrag(Double.parseDouble(geld));
+		String[] geldArray = geld.split("[\\.,]");
+		Euro geldInEuro;
+		if (geldArray.length >= 2) {
+			geldInEuro = new Euro(Integer.parseInt(geldArray[0]), Integer.parseInt(geldArray[1]));
+		} else {
+			geldInEuro = new Euro(Integer.parseInt(geldArray[0]), 0);
+		}
+
+		Geldbetrag geldbetrag = new Geldbetrag(geldInEuro);
 
 		if (bezahler == null) {
 			for (Mitglied m : gruppenMitglieder) {

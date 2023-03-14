@@ -1,36 +1,32 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
+
 import java.util.Objects;
 
 public final class Bilanz {
 
-	private final double wert;
-	private final String waehrung;
+	private final Euro wert;
 
-	public Bilanz(double wert) {
+	public Bilanz(Euro wert) {
 		this.wert = wert;
-		this.waehrung = "Euro";
 	}
 
-	public double getWert() {
+	public Euro getWert() {
 		return wert;
 	}
 
-	public String getWaehrung() {
-		return waehrung;
-	}
-
 	public Bilanz increaseBilanz(Geldbetrag geldbetrag) {
-		return new Bilanz(this.getWert() + geldbetrag.getWert());
+		return new Bilanz(Euro.add(this.getWert(), geldbetrag.getWert()));
 	}
 
 	public Bilanz decreaseBilanz(Geldbetrag geldbetrag) {
-		return new Bilanz(this.getWert() - geldbetrag.getWert());
+		return new Bilanz(Euro.subtract(this.getWert(), geldbetrag.getWert()));
 	}
 
 	@Override
 	public String toString() {
-		return wert + " " + waehrung;
+		return wert.toString();
 	}
 
 	@Override
@@ -38,11 +34,11 @@ public final class Bilanz {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Bilanz bilanz = (Bilanz) o;
-		return Double.compare(bilanz.wert, wert) == 0 && waehrung.equals(bilanz.waehrung);
+		return Objects.equals(wert, bilanz.wert);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(wert, waehrung);
+		return Objects.hash(wert);
 	}
 }

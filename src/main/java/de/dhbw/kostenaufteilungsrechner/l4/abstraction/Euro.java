@@ -29,36 +29,42 @@ public class Euro {
 		this.centBetrag = centBetrag;
 	}
 
-	public Euro add(Euro summand) {
-		this.euroBetrag += summand.getEuroBetrag();
-		this.centBetrag += summand.getCentBetrag();
-		if (this.centBetrag >= 100) {
-			this.euroBetrag += floor(this.centBetrag / 100);
-			this.centBetrag -= floor(this.centBetrag / 100) * 100;
+	public static Euro add(Euro a, Euro b) {
+		int summeInCent = 0;
+		if (a.getEuroBetrag() < 0) {
+			summeInCent = a.getEuroBetrag() * 100 - a.getCentBetrag() + b.getEuroBetrag() * 100 + b.getCentBetrag();
+		} else {
+			summeInCent = a.getEuroBetrag() * 100 + a.getCentBetrag() + b.getEuroBetrag() * 100 + b.getCentBetrag();
 		}
-		return this;
+		Euro summe = new Euro(summeInCent / 100, abs(summeInCent % 100));
+		return summe;
 	}
 
-	public Euro subtract(Euro subtrahend) {
-		this.euroBetrag -= subtrahend.getEuroBetrag();
-		this.centBetrag -= subtrahend.getCentBetrag();
-		if (this.centBetrag < 0) {
-			this.euroBetrag -= floor(abs(this.centBetrag / 100)) + 1;
-			this.centBetrag += (floor(abs(this.centBetrag / 100)) + 1) * 100;
+	public static Euro subtract(Euro minuend, Euro subtrahend) {
+		int minuendInCent = 0;
+		if (minuend.getEuroBetrag() < 0) {
+			minuendInCent = minuend.getEuroBetrag() * 100 - minuend.getCentBetrag();
+		} else {
+			minuendInCent = minuend.getEuroBetrag() * 100 + minuend.getCentBetrag();
 		}
-		return this;
+		int subtrahendInCent = subtrahend.getEuroBetrag() * 100 + subtrahend.getCentBetrag();
+		int differenzInCent = minuendInCent - subtrahendInCent;
+		Euro differenz = new Euro(differenzInCent / 100, abs(differenzInCent % 100));
+		return differenz;
 	}
-	
-	public Euro divide(int divisor) {
+
+	public static Euro divide(Euro dividend, int divisor) {
+		Euro quotient = new Euro(dividend.getEuroBetrag(), dividend.getCentBetrag());
 		int rest = 0;
-		this.centBetrag += (this.euroBetrag % divisor) * 100;
-		this.euroBetrag = (int) floor(this.euroBetrag / divisor);
+		quotient.centBetrag += (dividend.getEuroBetrag() % divisor) * 100; // 100 Cent dazu
+		quotient.euroBetrag = (int) floor(dividend.getEuroBetrag() / divisor);
 		do {
-			rest = this.centBetrag % divisor;
-			this.centBetrag += 1;
+			rest = quotient.centBetrag % divisor;
+			quotient.centBetrag += 1;
 		} while (rest != 0);
-		this.centBetrag = (int) floor(this.centBetrag / divisor);
-		return this;
+		quotient.centBetrag -= 1;
+		quotient.centBetrag /= divisor;
+		return new Euro(quotient.getEuroBetrag(), quotient.getCentBetrag());
 	}
 
 	@Override

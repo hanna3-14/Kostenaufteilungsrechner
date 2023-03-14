@@ -1,36 +1,32 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
+
 import java.util.Objects;
 
 public final class Geldbetrag {
 
-	private final double wert;
-	private final String waehrung;
+	private final Euro wert;
 
-	public Geldbetrag(double wert) {
-		if (wert >= 0.0) {
-			this.wert = wert;
+	public Geldbetrag(Euro wert) {
+		if (wert.getEuroBetrag() < 0 || wert.getCentBetrag() < 0) {
+			this.wert = new Euro(0, 0);
 		} else {
-			this.wert = 0.0;
+			this.wert = wert;
 		}
-		this.waehrung = "Euro";
 	}
 
-	public double getWert() {
+	public Euro getWert() {
 		return wert;
 	}
 
-	public String getWaehrung() {
-		return waehrung;
-	}
-
 	public Geldbetrag increaseGeldbetrag(Geldbetrag geldbetrag) {
-		return new Geldbetrag(this.getWert() + geldbetrag.getWert());
+		return new Geldbetrag(Euro.add(this.getWert(), geldbetrag.getWert()));
 	}
 
 	@Override
 	public String toString() {
-		return wert + " " + waehrung;
+		return wert.toString();
 	}
 
 	@Override
@@ -38,11 +34,11 @@ public final class Geldbetrag {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Geldbetrag that = (Geldbetrag) o;
-		return Double.compare(that.wert, wert) == 0 && waehrung.equals(that.waehrung);
+		return Objects.equals(wert, that.wert);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(wert, waehrung);
+		return Objects.hash(wert);
 	}
 }

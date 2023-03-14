@@ -1,9 +1,8 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.UUID;
+import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
+
+import java.util.*;
 
 public class Abrechnung {
 
@@ -20,7 +19,7 @@ public class Abrechnung {
 	}
 
 	public Abrechnung(UUID eventID) {
-		this(eventID, new Geldbetrag(0.0), new HashMap<>());
+		this(eventID, new Geldbetrag(new Euro(0, 0)), new HashMap<>());
 	}
 
 	public UUID getAbrechnungsID() {
@@ -73,7 +72,7 @@ public class Abrechnung {
 		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
 
 		// Berechnung der Gesamtausgaben
-		Geldbetrag gesamtausgaben = new Geldbetrag(0.0);
+		Geldbetrag gesamtausgaben = new Geldbetrag(new Euro(0, 0));
 		for (Ausgabe a : ausgabenListe) {
 			gesamtausgaben = gesamtausgaben.increaseGeldbetrag(a.getGeldbetrag());
 		}
@@ -83,8 +82,8 @@ public class Abrechnung {
 	public void berechneBilanzen(Event event) {
 		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
 
-		Bilanz startbilanz = new Bilanz(0.0);
-		LinkedHashMap<Integer, Bilanz> bilanzen = new LinkedHashMap<>();
+		Bilanz startbilanz = new Bilanz(new Euro(0, 0));
+		HashMap<Integer, Bilanz> bilanzen = new HashMap<>();
 
 		// Alle Mitglieder, die an einer Ausgabe des Events beteiligt sind, werden mit einer Startbilanz von 0.00 Euro hinzugefügt
 		for (Ausgabe a : ausgabenListe) {
@@ -98,11 +97,12 @@ public class Abrechnung {
 
 		// Berechnung der Bilanzen für die einzelnen Mitglieder
 		for (Ausgabe a : ausgabenListe) {
+			Geldbetrag anteiligerBetrag = new Geldbetrag(Euro.divide(a.getGeldbetrag().getWert(), a.getEmpfaengerIDs().size()));
+			System.out.println(anteiligerBetrag);
 			for (int i : bilanzen.keySet()) {
 				if (a.getBezahlerID() == i) {
 					bilanzen.computeIfPresent(i, (k, v) -> v.increaseBilanz(a.getGeldbetrag()));
 				}
-				Geldbetrag anteiligerBetrag = new Geldbetrag(a.getGeldbetrag().getWert() / a.getEmpfaengerIDs().size());
 				if (a.getEmpfaengerIDs().contains(i)) {
 					bilanzen.computeIfPresent(i, (k, v) -> v.decreaseBilanz(anteiligerBetrag));
 				}
