@@ -1,11 +1,15 @@
 package de.dhbw.kostenaufteilungsrechner.l4.abstraction;
 
+import com.google.gson.annotations.Expose;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
 
 public class Euro {
 
+	@Expose
 	private int euroBetrag;
+	@Expose
 	private int centBetrag;
 
 	public Euro(int euroBetrag, int centBetrag) {

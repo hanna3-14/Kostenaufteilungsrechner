@@ -2,6 +2,7 @@ package de.dhbw.kostenaufteilungsrechner.l1.adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.reflect.TypeToken;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Ausgabe;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Event;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class EventDBAdapter implements EventRepository {
 
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
 	String database = "datenbank/events.json";
 

@@ -1,5 +1,6 @@
 package de.dhbw.kostenaufteilungsrechner.l0.plugin;
 
+import de.dhbw.kostenaufteilungsrechner.l1.adapters.AbrechnungDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.EventDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.GruppeDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.*;
@@ -31,10 +32,12 @@ public class fuegeAusgabeZuEventHinzu implements Runnable {
 	@Override
 	public void run() {
 
+		AbrechnungDBAdapter abrechnungDBAdapter = new AbrechnungDBAdapter();
 		EventDBAdapter eventDBAdapter = new EventDBAdapter();
 		GruppeDBAdapter gruppeDBAdapter = new GruppeDBAdapter();
 
 		Event event = eventDBAdapter.findeEventÜberID(eventID).orElse(null);
+		Abrechnung abrechnung = abrechnungDBAdapter.findeAbrechnungÜberID(event.getAbrechnungsID()).orElse(null);
 		Gruppe gruppe = gruppeDBAdapter.findeGruppeÜberName(event.getGruppenName()).orElse(null);
 		List<Mitglied> gruppenMitglieder = gruppe.getMitgliederListe();
 
@@ -80,6 +83,18 @@ public class fuegeAusgabeZuEventHinzu implements Runnable {
 		Ausgabe ausgabe = new Ausgabe(beschreibung, geldbetrag, Integer.parseInt(bezahler), empfaengerIDs);
 
 		eventDBAdapter.fügeNeueAusgabeHinzu(eventID, ausgabe);
+
+		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
+		ausgabenListe.add(ausgabe);
+
+		if (abrechnung != null) {
+			abrechnung.aktualisiere(ausgabenListe);
+			abrechnungDBAdapter.aktualisiereAbrechnung(abrechnung);
+		} else {
+			abrechnung = new Abrechnung(event.getAbrechnungsID());
+			abrechnung.aktualisiere(ausgabenListe);
+			abrechnungDBAdapter.erstelleAbrechnung(abrechnung);
+		}
 
 		System.out.println();
 		System.out.println("Die folgende Ausgabe wurde erstellt und zum event " + eventID + " hinzugefügt:");

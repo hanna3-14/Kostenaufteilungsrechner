@@ -1,11 +1,15 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Gruppe {
 
+	@Expose
 	private String gruppenName;
+	@Expose
 	private List<Mitglied> mitgliederListe = new ArrayList<>();
 
 	public Gruppe(String gruppenName, List<String> namensListe) {

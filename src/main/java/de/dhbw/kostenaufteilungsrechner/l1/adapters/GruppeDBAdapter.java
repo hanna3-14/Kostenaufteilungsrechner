@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class GruppeDBAdapter implements GruppeRepository {
 
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
 	String database = "datenbank/gruppen.json";
 

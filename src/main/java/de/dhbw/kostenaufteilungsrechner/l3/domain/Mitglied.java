@@ -1,8 +1,12 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import com.google.gson.annotations.Expose;
+
 public class Mitglied {
 
+	@Expose
 	private int mitgliedsID;
+	@Expose
 	private String name;
 
 	public Mitglied(int mitgliedsID, String name) {
@@ -28,6 +32,6 @@ public class Mitglied {
 
 	@Override
 	public String toString() {
-		return "\t"+ mitgliedsID + " " + name + System.lineSeparator();
+		return "\t" + mitgliedsID + " " + name + System.lineSeparator();
 	}
 }

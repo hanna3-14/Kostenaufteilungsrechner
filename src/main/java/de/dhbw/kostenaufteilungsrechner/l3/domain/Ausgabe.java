@@ -1,14 +1,21 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 import java.util.UUID;
 
 public class Ausgabe {
 
+	@Expose
 	private UUID ausgabenID;
+	@Expose
 	private String beschreibung;
+	@Expose
 	private Geldbetrag geldbetrag;
+	@Expose
 	private int bezahlerID;
+	@Expose
 	private List<Integer> empfaengerIDs;
 
 	public Ausgabe(String beschreibung, Geldbetrag geldbetrag, int bezahlerID, List<Integer> empfaengerIDs) {

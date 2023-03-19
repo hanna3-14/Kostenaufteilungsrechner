@@ -1,37 +1,31 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import com.google.gson.annotations.Expose;
 import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
 
 import java.util.*;
 
-public class Abrechnung {
+public class Abrechnung implements EventBeobachter {
 
+	@Expose
 	private final UUID abrechnungsID;
-	private UUID eventID;
+	@Expose
 	private Geldbetrag gesamtausgaben;
+	@Expose
 	private HashMap<Integer, Bilanz> bilanzenMap;
 
-	public Abrechnung(UUID eventID, Geldbetrag gesamtausgaben, HashMap<Integer, Bilanz> bilanzenMap) {
-		this.abrechnungsID = UUID.randomUUID();
-		this.eventID = eventID;
+	public Abrechnung(UUID abrechnungsID, Geldbetrag gesamtausgaben, HashMap<Integer, Bilanz> bilanzenMap) {
+		this.abrechnungsID = abrechnungsID;
 		this.gesamtausgaben = gesamtausgaben;
 		this.bilanzenMap = bilanzenMap;
 	}
 
-	public Abrechnung(UUID eventID) {
-		this(eventID, new Geldbetrag(new Euro(0, 0)), new HashMap<>());
+	public Abrechnung(UUID abrechnungsID) {
+		this(abrechnungsID, new Geldbetrag(new Euro(0, 0)), new HashMap<>());
 	}
 
 	public UUID getAbrechnungsID() {
 		return abrechnungsID;
-	}
-
-	public UUID getEventID() {
-		return eventID;
-	}
-
-	public void setEventID(UUID eventID) {
-		this.eventID = eventID;
 	}
 
 	public Geldbetrag getGesamtausgaben() {
@@ -63,14 +57,11 @@ public class Abrechnung {
 	public String toString() {
 		String bilanzenstring = this.getBilanzenString();
 		return "AbrechnungsID: " + abrechnungsID + System.lineSeparator() +
-				"EventID: " + eventID + System.lineSeparator() +
 				"Gesamtausgaben: " + gesamtausgaben + System.lineSeparator() +
 				"Bilanzen: " + bilanzenstring;
 	}
 
-	public void berechneGesamtausgaben(Event event) {
-		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
-
+	public void berechneGesamtausgaben(List<Ausgabe> ausgabenListe) {
 		// Berechnung der Gesamtausgaben
 		Geldbetrag gesamtausgaben = new Geldbetrag(new Euro(0, 0));
 		for (Ausgabe a : ausgabenListe) {
@@ -79,9 +70,7 @@ public class Abrechnung {
 		this.setGesamtausgaben(gesamtausgaben);
 	}
 
-	public void berechneBilanzen(Event event) {
-		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
-
+	public void berechneBilanzen(List<Ausgabe> ausgabenListe) {
 		Bilanz startbilanz = new Bilanz(new Euro(0, 0));
 		HashMap<Integer, Bilanz> bilanzen = new HashMap<>();
 
@@ -98,7 +87,6 @@ public class Abrechnung {
 		// Berechnung der Bilanzen für die einzelnen Mitglieder
 		for (Ausgabe a : ausgabenListe) {
 			Geldbetrag anteiligerBetrag = new Geldbetrag(Euro.divide(a.getGeldbetrag().getWert(), a.getEmpfaengerIDs().size()));
-			System.out.println(anteiligerBetrag);
 			for (int i : bilanzen.keySet()) {
 				if (a.getBezahlerID() == i) {
 					bilanzen.computeIfPresent(i, (k, v) -> v.increaseBilanz(a.getGeldbetrag()));
@@ -109,5 +97,11 @@ public class Abrechnung {
 			}
 		}
 		this.setBilanzenMap(bilanzen);
+	}
+
+	@Override
+	public void aktualisiere(List<Ausgabe> ausgabenListe) {
+		this.berechneGesamtausgaben(ausgabenListe);
+		this.berechneBilanzen(ausgabenListe);
 	}
 }

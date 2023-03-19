@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class AbrechnungDBAdapter implements AbrechnungRepository {
 
-	Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 
 	String database = "datenbank/abrechnungen.json";
 
@@ -76,7 +76,6 @@ public class AbrechnungDBAdapter implements AbrechnungRepository {
 			}.getType());
 			for (Abrechnung a : abrechnungen) {
 				if (a.getAbrechnungsID().equals(abrechnung.getAbrechnungsID())) {
-					a.setEventID(abrechnung.getEventID());
 					a.setGesamtausgaben(abrechnung.getGesamtausgaben());
 					a.setBilanzenMap(abrechnung.getBilanzenMap());
 				}

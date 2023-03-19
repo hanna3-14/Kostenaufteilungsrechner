@@ -1,11 +1,13 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import com.google.gson.annotations.Expose;
 import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
 
 import java.util.Objects;
 
 public final class Geldbetrag {
 
+	@Expose
 	private final Euro wert;
 
 	public Geldbetrag(Euro wert) {
