@@ -1,26 +1,30 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public abstract class EventSubjekt {
 
-	private EventBeobachter abrechnung;
+	private List<EventBeobachter> angemeldeteBeobachter;
 
 	public EventSubjekt() {
 		super();
-		abrechnung = new Abrechnung(null);
-	}
-
-	public EventBeobachter getAbrechnung() {
-		return abrechnung;
+		this.angemeldeteBeobachter = new ArrayList<>();
 	}
 
 	public void meldeAn(UUID abrechnungsID) {
-		this.abrechnung = new Abrechnung(abrechnungsID);
+		if (this.angemeldeteBeobachter == null) {
+			this.angemeldeteBeobachter = new ArrayList<>();
+		}
+		this.angemeldeteBeobachter.add(new Abrechnung(abrechnungsID));
+	}
+
+	public void meldeAb(UUID abrechnungsID) {
+		this.angemeldeteBeobachter.remove(abrechnungsID);
 	}
 
 	protected void benachrichtige(List<Ausgabe> ausgabenListe) {
-		this.abrechnung.aktualisiere(ausgabenListe);
+		this.angemeldeteBeobachter.forEach(b -> b.aktualisiere(ausgabenListe));
 	}
 }
