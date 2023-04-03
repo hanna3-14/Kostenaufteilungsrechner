@@ -3,6 +3,8 @@ package de.dhbw.kostenaufteilungsrechner.l0.plugin;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.AbrechnungDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.EventDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.GruppeDBAdapter;
+import de.dhbw.kostenaufteilungsrechner.l2.application.BilanzenBerechner;
+import de.dhbw.kostenaufteilungsrechner.l2.application.GesamtausgabenBerechner;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.*;
 import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
 import picocli.CommandLine;
@@ -82,19 +84,17 @@ public class fuegeAusgabeZuEventHinzu implements Runnable {
 
 		Ausgabe ausgabe = new Ausgabe(beschreibung, geldbetrag, Integer.parseInt(bezahler), empfaengerIDs);
 
-		eventDBAdapter.fügeNeueAusgabeHinzu(eventID, ausgabe);
+		event.meldeAn(abrechnung);
+		abrechnung.setGesamtausgabenBerechner(new GesamtausgabenBerechner());
+		abrechnung.setBilanzenBerechner(new BilanzenBerechner());
+
+		eventDBAdapter.fügeNeueAusgabeHinzu(eventID, ausgabe, abrechnung);
 
 		List<Ausgabe> ausgabenListe = event.getAusgabenListe();
 		ausgabenListe.add(ausgabe);
 
-		if (abrechnung != null) {
-			abrechnung.aktualisiere(ausgabenListe);
-			abrechnungDBAdapter.aktualisiereAbrechnung(abrechnung);
-		} else {
-			abrechnung = new Abrechnung(event.getAbrechnungsID());
-			abrechnung.aktualisiere(ausgabenListe);
-			abrechnungDBAdapter.erstelleAbrechnung(abrechnung);
-		}
+		abrechnung.aktualisiere(ausgabenListe);
+		abrechnungDBAdapter.aktualisiereAbrechnung(abrechnung);
 
 		System.out.println();
 		System.out.println("Die folgende Ausgabe wurde erstellt und zum event " + eventID + " hinzugefügt:");

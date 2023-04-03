@@ -2,19 +2,17 @@ package de.dhbw.kostenaufteilungsrechner.l2.application;
 
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Ausgabe;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Bilanz;
+import de.dhbw.kostenaufteilungsrechner.l3.domain.BilanzenBerechenbar;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Geldbetrag;
 import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class BilanzenBerechner {
+public class BilanzenBerechner implements BilanzenBerechenbar {
 
-	public BilanzenBerechner() {
-		super();
-	}
-
-	public HashMap<Integer, Bilanz> anhandVon(List<Ausgabe> ausgabenListe) {
+	@Override
+	public HashMap<Integer, Bilanz> berechneBilanzen(List<Ausgabe> ausgabenListe) {
 
 		Bilanz startbilanz = new Bilanz(new Euro(0, 0));
 		HashMap<Integer, Bilanz> bilanzen = new HashMap<>();

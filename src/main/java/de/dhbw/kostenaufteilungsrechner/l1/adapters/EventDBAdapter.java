@@ -2,8 +2,8 @@ package de.dhbw.kostenaufteilungsrechner.l1.adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.reflect.TypeToken;
+import de.dhbw.kostenaufteilungsrechner.l3.domain.Abrechnung;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Ausgabe;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Event;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.EventRepository;
@@ -93,13 +93,14 @@ public class EventDBAdapter implements EventRepository {
 	}
 
 	@Override
-	public void fügeNeueAusgabeHinzu(UUID eventID, Ausgabe ausgabe) {
+	public void fügeNeueAusgabeHinzu(UUID eventID, Ausgabe ausgabe, Abrechnung abrechnung) {
 		List<Event> events = new ArrayList<>();
 		try (BufferedReader br = new BufferedReader(new FileReader(database))) {
 			events = gson.fromJson(br, new TypeToken<List<Event>>() {
 			}.getType());
 			for (Event e : events) {
 				if (e.getEventID().equals(eventID)) {
+					e.meldeAn(abrechnung);
 					e.addAusgabe(ausgabe);
 				}
 			}

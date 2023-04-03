@@ -1,13 +1,18 @@
 package de.dhbw.kostenaufteilungsrechner.l0.plugin;
 
+import de.dhbw.kostenaufteilungsrechner.l1.adapters.AbrechnungDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.EventDBAdapter;
 import de.dhbw.kostenaufteilungsrechner.l1.adapters.GruppeDBAdapter;
+import de.dhbw.kostenaufteilungsrechner.l2.application.BilanzenBerechner;
+import de.dhbw.kostenaufteilungsrechner.l2.application.GesamtausgabenBerechner;
+import de.dhbw.kostenaufteilungsrechner.l3.domain.Abrechnung;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Event;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Gruppe;
 import picocli.CommandLine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @CommandLine.Command(name = "erstelle-event", description = "erstellt ein neues Event")
 public class erstelleEvent implements Runnable {
@@ -21,6 +26,7 @@ public class erstelleEvent implements Runnable {
 	@Override
 	public void run() {
 
+		AbrechnungDBAdapter abrechnungDBAdapter = new AbrechnungDBAdapter();
 		EventDBAdapter eventDBAdapter = new EventDBAdapter();
 		GruppeDBAdapter gruppeDBAdapter = new GruppeDBAdapter();
 
@@ -53,12 +59,15 @@ public class erstelleEvent implements Runnable {
 			gruppenName = System.console().readLine("Gruppenname: ");
 		}
 
-		Event event = new Event(beschreibung, gruppenName);
+		Abrechnung abrechnung = new Abrechnung(UUID.randomUUID(), new GesamtausgabenBerechner(), new BilanzenBerechner());
+		Event event = new Event(abrechnung, beschreibung, gruppenName);
+		event.meldeAn(abrechnung);
 		System.out.println();
 
 		System.out.println("Das folgende Event wurde erstellt:");
 		System.out.println(event);
 
+		abrechnungDBAdapter.erstelleAbrechnung(abrechnung);
 		eventDBAdapter.erstelleEvent(event);
 	}
 }

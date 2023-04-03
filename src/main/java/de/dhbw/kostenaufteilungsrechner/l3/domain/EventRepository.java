@@ -13,7 +13,7 @@ public interface EventRepository {
 
 	void aktualisiereEvent(Event event);
 
-	void fügeNeueAusgabeHinzu(UUID eventID, Ausgabe ausgabe);
+	void fügeNeueAusgabeHinzu(UUID eventID, Ausgabe ausgabe, Abrechnung abrechnung);
 
 	void entferneEvent(UUID eventID);
 }

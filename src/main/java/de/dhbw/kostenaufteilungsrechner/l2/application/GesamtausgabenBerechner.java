@@ -1,18 +1,16 @@
 package de.dhbw.kostenaufteilungsrechner.l2.application;
 
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Ausgabe;
+import de.dhbw.kostenaufteilungsrechner.l3.domain.GesamtausgabenBerechenbar;
 import de.dhbw.kostenaufteilungsrechner.l3.domain.Geldbetrag;
 import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
 
 import java.util.List;
 
-public class GesamtausgabenBerechner {
+public class GesamtausgabenBerechner implements GesamtausgabenBerechenbar {
 
-	public GesamtausgabenBerechner() {
-		super();
-	}
-
-	public Geldbetrag anhandVon(List<Ausgabe> ausgabenListe) {
+	@Override
+	public Geldbetrag berechneGesamtausgaben(List<Ausgabe> ausgabenListe) {
 
 		Geldbetrag gesamtausgaben = new Geldbetrag(new Euro(0, 0));
 

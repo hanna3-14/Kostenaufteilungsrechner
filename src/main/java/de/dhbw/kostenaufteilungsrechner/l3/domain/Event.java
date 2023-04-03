@@ -19,12 +19,12 @@ public class Event extends EventSubjekt {
 	@Expose
 	private List<Ausgabe> ausgabenListe = new ArrayList<>();
 
-	public Event(String beschreibung, String gruppenName) {
+	public Event(Abrechnung abrechnung, String beschreibung, String gruppenName) {
 		this.eventID = UUID.randomUUID();
-		this.abrechnungsID = UUID.randomUUID();
+		this.abrechnungsID = abrechnung.getAbrechnungsID();
 		this.beschreibung = beschreibung;
 		this.gruppenName = gruppenName;
-		this.meldeAn(abrechnungsID);
+		this.meldeAn(abrechnung);
 	}
 
 	public UUID getEventID() {
@@ -61,7 +61,6 @@ public class Event extends EventSubjekt {
 
 	public void addAusgabe(Ausgabe ausgabe) {
 		this.ausgabenListe.add(ausgabe);
-		this.meldeAn(abrechnungsID);
 		this.benachrichtige(this.getAusgabenListe());
 	}
 

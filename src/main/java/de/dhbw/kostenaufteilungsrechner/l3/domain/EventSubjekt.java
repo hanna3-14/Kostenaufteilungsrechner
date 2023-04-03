@@ -13,11 +13,15 @@ public abstract class EventSubjekt {
 		this.angemeldeteBeobachter = new ArrayList<>();
 	}
 
-	public void meldeAn(UUID abrechnungsID) {
+	public List<EventBeobachter> getAngemeldeteBeobachter() {
+		return angemeldeteBeobachter;
+	}
+
+	public void meldeAn(Abrechnung abrechnung) {
 		if (this.angemeldeteBeobachter == null) {
 			this.angemeldeteBeobachter = new ArrayList<>();
 		}
-		this.angemeldeteBeobachter.add(new Abrechnung(abrechnungsID));
+		this.angemeldeteBeobachter.add(abrechnung);
 	}
 
 	public void meldeAb(UUID abrechnungsID) {

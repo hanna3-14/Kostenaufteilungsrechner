@@ -34,9 +34,10 @@ public class zeigeAbrechnungen implements Runnable {
 
 			for (Event e : events) {
 				if (e.getGruppenName().equals(gruppenName)) {
-					System.out.println(abrechnungDBAdapter.findeAbrechnungÜberID(e.getAbrechnungsID()));
+					System.out.println(abrechnungDBAdapter.findeAbrechnungÜberID(e.getAbrechnungsID()).orElse(null));
 				}
 			}
+			return;
 		}
 
 		if (abrechnungsID != null) {
