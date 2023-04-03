@@ -1,6 +1,8 @@
 package de.dhbw.kostenaufteilungsrechner.l3.domain;
 
 import com.google.gson.annotations.Expose;
+import de.dhbw.kostenaufteilungsrechner.l2.application.BilanzenBerechner;
+import de.dhbw.kostenaufteilungsrechner.l2.application.GesamtausgabenBerechner;
 import de.dhbw.kostenaufteilungsrechner.l4.abstraction.Euro;
 
 import java.util.*;
@@ -61,47 +63,11 @@ public class Abrechnung implements EventBeobachter {
 				"Bilanzen: " + bilanzenstring;
 	}
 
-	public void berechneGesamtausgaben(List<Ausgabe> ausgabenListe) {
-		// Berechnung der Gesamtausgaben
-		Geldbetrag gesamtausgaben = new Geldbetrag(new Euro(0, 0));
-		for (Ausgabe a : ausgabenListe) {
-			gesamtausgaben = gesamtausgaben.increaseGeldbetrag(a.getGeldbetrag());
-		}
-		this.setGesamtausgaben(gesamtausgaben);
-	}
-
-	public void berechneBilanzen(List<Ausgabe> ausgabenListe) {
-		Bilanz startbilanz = new Bilanz(new Euro(0, 0));
-		HashMap<Integer, Bilanz> bilanzen = new HashMap<>();
-
-		// Alle Mitglieder, die an einer Ausgabe des Events beteiligt sind, werden mit einer Startbilanz von 0.00 Euro hinzugefügt
-		for (Ausgabe a : ausgabenListe) {
-			bilanzen.put(a.getBezahlerID(), startbilanz);
-		}
-		for (Ausgabe a : ausgabenListe) {
-			for (int i : a.getEmpfaengerIDs()) {
-				bilanzen.put(i, startbilanz);
-			}
-		}
-
-		// Berechnung der Bilanzen für die einzelnen Mitglieder
-		for (Ausgabe a : ausgabenListe) {
-			Geldbetrag anteiligerBetrag = new Geldbetrag(Euro.divide(a.getGeldbetrag().getWert(), a.getEmpfaengerIDs().size()));
-			for (int i : bilanzen.keySet()) {
-				if (a.getBezahlerID() == i) {
-					bilanzen.computeIfPresent(i, (k, v) -> v.increaseBilanz(a.getGeldbetrag()));
-				}
-				if (a.getEmpfaengerIDs().contains(i)) {
-					bilanzen.computeIfPresent(i, (k, v) -> v.decreaseBilanz(anteiligerBetrag));
-				}
-			}
-		}
-		this.setBilanzenMap(bilanzen);
-	}
-
 	@Override
 	public void aktualisiere(List<Ausgabe> ausgabenListe) {
-		this.berechneGesamtausgaben(ausgabenListe);
-		this.berechneBilanzen(ausgabenListe);
+		GesamtausgabenBerechner gesamtausgabenBerechner = new GesamtausgabenBerechner();
+		this.setGesamtausgaben(gesamtausgabenBerechner.anhandVon(ausgabenListe));
+		BilanzenBerechner bilanzenBerechner = new BilanzenBerechner();
+		this.setBilanzenMap(bilanzenBerechner.anhandVon(ausgabenListe));
 	}
 }
