@@ -14,7 +14,7 @@ public class BilanzenBerechner implements BilanzenBerechenbar {
 	@Override
 	public HashMap<Integer, Bilanz> berechneBilanzen(List<Ausgabe> ausgabenListe) {
 
-		Bilanz startbilanz = new Bilanz(new Euro(0, 0));
+		Bilanz startbilanz = new Bilanz(new Euro('+', 0, 0));
 		HashMap<Integer, Bilanz> bilanzen = new HashMap<>();
 
 		// Alle Mitglieder, die an einer Ausgabe des Events beteiligt sind, werden mit einer Startbilanz von 0.00 Euro hinzugefügt

@@ -54,9 +54,9 @@ public class fuegeAusgabeZuEventHinzu implements Runnable {
 		String[] geldArray = geld.split("[\\.,]");
 		Euro geldInEuro;
 		if (geldArray.length >= 2) {
-			geldInEuro = new Euro(Integer.parseInt(geldArray[0]), Integer.parseInt(geldArray[1]));
+			geldInEuro = new Euro('+', Integer.parseInt(geldArray[0]), Integer.parseInt(geldArray[1]));
 		} else {
-			geldInEuro = new Euro(Integer.parseInt(geldArray[0]), 0);
+			geldInEuro = new Euro('+', Integer.parseInt(geldArray[0]), 0);
 		}
 
 		Geldbetrag geldbetrag = new Geldbetrag(geldInEuro);

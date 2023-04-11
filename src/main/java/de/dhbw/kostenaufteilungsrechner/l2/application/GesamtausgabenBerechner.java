@@ -12,7 +12,7 @@ public class GesamtausgabenBerechner implements GesamtausgabenBerechenbar {
 	@Override
 	public Geldbetrag berechneGesamtausgaben(List<Ausgabe> ausgabenListe) {
 
-		Geldbetrag gesamtausgaben = new Geldbetrag(new Euro(0, 0));
+		Geldbetrag gesamtausgaben = new Geldbetrag(new Euro('+', 0, 0));
 
 		for (Ausgabe a : ausgabenListe) {
 			gesamtausgaben = gesamtausgaben.increaseGeldbetrag(a.getGeldbetrag());

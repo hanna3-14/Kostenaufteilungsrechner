@@ -8,13 +8,24 @@ import static java.lang.Math.floor;
 public class Euro {
 
 	@Expose
+	private char vorzeichen;
+	@Expose
 	private int euroBetrag;
 	@Expose
 	private int centBetrag;
 
-	public Euro(int euroBetrag, int centBetrag) {
+	public Euro(char vorzeichen, int euroBetrag, int centBetrag) {
+		this.vorzeichen = vorzeichen;
 		this.euroBetrag = euroBetrag;
 		this.centBetrag = centBetrag;
+	}
+
+	public char getVorzeichen() {
+		return vorzeichen;
+	}
+
+	public void setVorzeichen(char vorzeichen) {
+		this.vorzeichen = vorzeichen;
 	}
 
 	public int getEuroBetrag() {
@@ -34,31 +45,52 @@ public class Euro {
 	}
 
 	public static Euro add(Euro a, Euro b) {
-		int summeInCent = 0;
-		if (a.getEuroBetrag() < 0) {
-			summeInCent = a.getEuroBetrag() * 100 - a.getCentBetrag() + b.getEuroBetrag() * 100 + b.getCentBetrag();
+		char vorzeichen = '+';
+		int aInCent = 0;
+		if (a.getVorzeichen() == '-') {
+			aInCent = a.getEuroBetrag() * (-100) - a.getCentBetrag();
 		} else {
-			summeInCent = a.getEuroBetrag() * 100 + a.getCentBetrag() + b.getEuroBetrag() * 100 + b.getCentBetrag();
+			aInCent = a.getEuroBetrag() * 100 + a.getCentBetrag();
 		}
-		Euro summe = new Euro(summeInCent / 100, abs(summeInCent % 100));
+		int bInCent = 0;
+		if (b.getVorzeichen() == '-') {
+			bInCent = b.getEuroBetrag() * (-100) - b.getCentBetrag();
+		} else {
+			bInCent = b.getEuroBetrag() * 100 + b.getCentBetrag();
+		}
+		int summeInCent = aInCent + bInCent;
+		if (summeInCent < 0) {
+			vorzeichen = '-';
+		}
+		Euro summe = new Euro(vorzeichen, abs(summeInCent / 100), abs(summeInCent % 100));
 		return summe;
 	}
 
 	public static Euro subtract(Euro minuend, Euro subtrahend) {
+		char vorzeichen = '+';
 		int minuendInCent = 0;
-		if (minuend.getEuroBetrag() < 0) {
-			minuendInCent = minuend.getEuroBetrag() * 100 - minuend.getCentBetrag();
+		if (minuend.getVorzeichen() == '-') {
+			minuendInCent = minuend.getEuroBetrag() * (-100) - minuend.getCentBetrag();
 		} else {
 			minuendInCent = minuend.getEuroBetrag() * 100 + minuend.getCentBetrag();
 		}
-		int subtrahendInCent = subtrahend.getEuroBetrag() * 100 + subtrahend.getCentBetrag();
+		int subtrahendInCent = 0;
+		if (subtrahend.getVorzeichen() == '-') {
+			subtrahendInCent = subtrahend.getEuroBetrag() * (-100) - subtrahend.getCentBetrag();
+		} else {
+			subtrahendInCent = subtrahend.getEuroBetrag() * 100 + subtrahend.getCentBetrag();
+		}
 		int differenzInCent = minuendInCent - subtrahendInCent;
-		Euro differenz = new Euro(differenzInCent / 100, abs(differenzInCent % 100));
+		if (differenzInCent < 0) {
+			vorzeichen = '-';
+		}
+		Euro differenz = new Euro(vorzeichen, abs(differenzInCent / 100), abs(differenzInCent % 100));
 		return differenz;
 	}
 
 	public static Euro divide(Euro dividend, int divisor) {
-		Euro quotient = new Euro(dividend.getEuroBetrag(), dividend.getCentBetrag());
+		char vorzeichen = '+';
+		Euro quotient = new Euro(vorzeichen, dividend.getEuroBetrag(), dividend.getCentBetrag());
 		int rest = 0;
 		quotient.centBetrag += (dividend.getEuroBetrag() % divisor) * 100; // 100 Cent dazu
 		quotient.euroBetrag = (int) floor(dividend.getEuroBetrag() / divisor);
@@ -68,11 +100,14 @@ public class Euro {
 		} while (rest != 0);
 		quotient.centBetrag -= 1;
 		quotient.centBetrag /= divisor;
-		return new Euro(quotient.getEuroBetrag(), quotient.getCentBetrag());
+		if ((dividend.getVorzeichen() == '-' && divisor > 0) || (dividend.getVorzeichen() == '+' && divisor < 0)) {
+			vorzeichen = '-';
+		}
+		return new Euro(vorzeichen, abs(quotient.getEuroBetrag()), quotient.getCentBetrag());
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%d,%02d€", euroBetrag, centBetrag);
+		return String.format("%s%d,%02d€", vorzeichen, euroBetrag, centBetrag);
 	}
 }

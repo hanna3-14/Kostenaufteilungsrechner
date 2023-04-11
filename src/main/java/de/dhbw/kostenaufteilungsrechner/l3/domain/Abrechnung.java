@@ -27,7 +27,7 @@ public class Abrechnung implements EventBeobachter {
 	}
 
 	public Abrechnung(UUID abrechnungsID, GesamtausgabenBerechenbar gesamtausgabenBerechner, BilanzenBerechenbar bilanzenBerechner) {
-		this(abrechnungsID, new Geldbetrag(new Euro(0, 0)), new HashMap<>(), gesamtausgabenBerechner, bilanzenBerechner);
+		this(abrechnungsID, new Geldbetrag(new Euro('+', 0, 0)), new HashMap<>(), gesamtausgabenBerechner, bilanzenBerechner);
 	}
 
 	public UUID getAbrechnungsID() {

@@ -12,7 +12,7 @@ public final class Geldbetrag {
 
 	public Geldbetrag(Euro wert) {
 		if (wert.getEuroBetrag() < 0 || wert.getCentBetrag() < 0) {
-			this.wert = new Euro(0, 0);
+			this.wert = new Euro('+', 0, 0);
 		} else {
 			this.wert = wert;
 		}
