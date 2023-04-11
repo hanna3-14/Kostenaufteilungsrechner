@@ -11,7 +11,7 @@ public final class Geldbetrag {
 	private final Euro wert;
 
 	public Geldbetrag(Euro wert) {
-		if (wert.getEuroBetrag() < 0 || wert.getCentBetrag() < 0) {
+		if (wert.getVorzeichen() != '+') {
 			this.wert = new Euro('+', 0, 0);
 		} else {
 			this.wert = wert;
