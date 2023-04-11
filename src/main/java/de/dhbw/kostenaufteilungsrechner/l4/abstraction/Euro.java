@@ -47,17 +47,9 @@ public class Euro {
 	public static Euro add(Euro a, Euro b) {
 		char vorzeichen = '+';
 		int aInCent = 0;
-		if (a.getVorzeichen() == '-') {
-			aInCent = a.getEuroBetrag() * (-100) - a.getCentBetrag();
-		} else {
-			aInCent = a.getEuroBetrag() * 100 + a.getCentBetrag();
-		}
+		aInCent = wertInCent(a);
 		int bInCent = 0;
-		if (b.getVorzeichen() == '-') {
-			bInCent = b.getEuroBetrag() * (-100) - b.getCentBetrag();
-		} else {
-			bInCent = b.getEuroBetrag() * 100 + b.getCentBetrag();
-		}
+		bInCent = wertInCent(b);
 		int summeInCent = aInCent + bInCent;
 		if (summeInCent < 0) {
 			vorzeichen = '-';
@@ -69,17 +61,9 @@ public class Euro {
 	public static Euro subtract(Euro minuend, Euro subtrahend) {
 		char vorzeichen = '+';
 		int minuendInCent = 0;
-		if (minuend.getVorzeichen() == '-') {
-			minuendInCent = minuend.getEuroBetrag() * (-100) - minuend.getCentBetrag();
-		} else {
-			minuendInCent = minuend.getEuroBetrag() * 100 + minuend.getCentBetrag();
-		}
+		minuendInCent = wertInCent(minuend);
 		int subtrahendInCent = 0;
-		if (subtrahend.getVorzeichen() == '-') {
-			subtrahendInCent = subtrahend.getEuroBetrag() * (-100) - subtrahend.getCentBetrag();
-		} else {
-			subtrahendInCent = subtrahend.getEuroBetrag() * 100 + subtrahend.getCentBetrag();
-		}
+		subtrahendInCent = wertInCent(subtrahend);
 		int differenzInCent = minuendInCent - subtrahendInCent;
 		if (differenzInCent < 0) {
 			vorzeichen = '-';
@@ -104,6 +88,16 @@ public class Euro {
 			vorzeichen = '-';
 		}
 		return new Euro(vorzeichen, abs(quotient.getEuroBetrag()), quotient.getCentBetrag());
+	}
+
+	private static int wertInCent(Euro euro) {
+		int wertInCent = 0;
+		if (euro.getVorzeichen() == '-') {
+			wertInCent = euro.getEuroBetrag() * (-100) - euro.getCentBetrag();
+		} else {
+			wertInCent = euro.getEuroBetrag() * 100 + euro.getCentBetrag();
+		}
+		return wertInCent;
 	}
 
 	@Override
